@@ -5,7 +5,6 @@
 
 FILE *f;
 void *buf;
-uintptr_t bufdelta;
 
 typedef void (*entrypoint_t)(int (*putsp)(const char*));
 
@@ -75,7 +74,7 @@ int main(int argc, char **argv)
     check(el_load(&ctx, alloccb), "loading");
     check(el_relocate(&ctx), "relocating");
 
-    uintptr_t epaddr = ctx.ehdr.e_entry + bufdelta;
+    uintptr_t epaddr = ctx.ehdr.e_entry + (uintptr_t) buf;
 
     entrypoint_t ep = (entrypoint_t) epaddr;
 
