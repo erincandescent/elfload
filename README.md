@@ -65,16 +65,24 @@ elfload. A sample source file, "sample.c", is supplied which is designed to
 be loaded by this program.
 
 Linux, *BSD and Illumos users can probably compile this using
+
+````
     $ gcc -o sample.elf sample.c -nostdlib -pie -fPIC
+````
 
 Otherwise, you will probably need to use an ELF cross compiler, e.g.
+````
     $ YourArch-elf-gcc -o sample.elf sample.c -nostdlib -pie -fPIC
+````
 
 (If you are testing this on AMD64 Windows, add -mabi=ms to that compile line)
 
 You should then be able to run sample.elf, and get a "Helllo, World!" response,
 using
+
+````
     $ ./elfloader sample.elf
+````
 
 (if you are not using your system compiler, then you may experience issues at
 this step due to ABI mismatches. YMMV.)
