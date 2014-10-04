@@ -210,7 +210,7 @@ el_status el_findrelocs(el_ctx *ctx, el_relocinfo *ri, uint32_t type)
 
     if (rel.d_tag == DT_NULL
             || relsz.d_tag == DT_NULL
-            || relent.d_tag == DT_RELENT) {
+            || relent.d_tag == DT_NULL) {
         ri->entrysize = 0;
         ri->tablesize = 0;
         ri->tableoff  = 0;
