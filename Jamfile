@@ -1,0 +1,9 @@
+SubDir ELFLOAD_TOP ;
+SubDirCcFlags -std=c99 $(ELFLOAD_OPTS) ;
+
+Library elfload :
+    elfload.c
+    elfreloc_aarch64.c
+    elfreloc_amd64.c
+    elfreloc_i386.c
+    ;
