@@ -11,6 +11,8 @@
 #define EM_THIS EM_ARM
 #elif defined(__aarch64__)
 #define EM_THIS EM_AARCH64
+#define EL_ARCH_USES_RELA
+#define EL_ARCH_USES_REL
 #else
 #error specify your ELF architecture
 #endif
