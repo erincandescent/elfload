@@ -92,7 +92,7 @@ el_status el_init(el_ctx *ctx)
         if ((rv = el_findphdr(ctx, &ph, PT_LOAD, &i)))
             return rv;
 
-        if (i == -1)
+        if (i == (unsigned) -1)
             break;
 
         Elf_Addr phend = ph.p_vaddr + ph.p_memsz;
@@ -111,7 +111,7 @@ el_status el_init(el_ctx *ctx)
         if ((rv = el_findphdr(ctx, &ph, PT_DYNAMIC, &i)))
             return rv;
 
-        if (i == -1)
+        if (i == (unsigned) -1)
             return EL_NODYN;
 
         ctx->dynoff  = ph.p_offset;
@@ -121,8 +121,6 @@ el_status el_init(el_ctx *ctx)
         ctx->dynsize = 0;
     }
 
-    return rv;
-clean1:
     return rv;
 }
 
@@ -149,14 +147,14 @@ el_status el_load(el_ctx *ctx, el_alloc_cb alloc)
         if ((rv = el_findphdr(ctx, &ph, PT_LOAD, &i)))
             return rv;
 
-        if (i == -1)
+        if (i == (unsigned) -1)
             break;
 
         Elf_Addr pload = ph.p_paddr + pdelta;
         Elf_Addr vload = ph.p_vaddr + vdelta;
 
         /* allocate mem */
-        void *dest = alloc(ctx, pload, vload, ph.p_memsz);
+        char *dest = alloc(ctx, pload, vload, ph.p_memsz);
         if (!dest)
             return EL_ENOMEM;
 
@@ -277,6 +275,9 @@ el_status el_relocate(el_ctx *ctx)
     }
 #endif
 
+#if !defined(EL_ARCH_USES_REL) && !defined(EL_ARCH_USES_RELA)
+    #error No relocation type defined!
+#endif
 
-    return 0;
+    return rv;
 }
