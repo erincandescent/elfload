@@ -27,7 +27,9 @@ el_status el_applyrela(el_ctx *ctx, Elf_RelA *rel)
     uint32_t sym  = ELF_R_SYM(rel->r_info);
 
     switch (type) {
-        case R_AARCH64_NONE: break;
+        case R_AARCH64_NONE:
+            EL_DEBUG("R_AARCH64_NONE\n");
+            break;
         case R_AARCH64_RELATIVE:
             if (sym) {
                 EL_DEBUG("R_AARCH64_RELATIVE with symbol ref!\n");
@@ -54,7 +56,9 @@ el_status el_applyrel(el_ctx *ctx, Elf_Rel *rel)
     uint32_t sym  = ELF_R_SYM(rel->r_info);
 
     switch (type) {
-        case R_AARCH64_NONE: break;
+        case R_AARCH64_NONE:
+            EL_DEBUG("R_AARCH64_NONE\n");
+            break;
         case R_AARCH64_RELATIVE:
             if (sym) {
                 EL_DEBUG("R_AARCH64_RELATIVE with symbol ref!\n");

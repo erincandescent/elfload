@@ -231,6 +231,8 @@ el_status el_relocate(el_ctx *ctx)
     if (ctx->ehdr.e_type != ET_DYN)
         return EL_OK;
 
+    const char *base = ctx->base_load_paddr;
+
     el_relocinfo ri;
 #ifdef EL_ARCH_USES_REL
     if ((rv = el_findrelocs(ctx, &ri, DT_REL)))
@@ -242,15 +244,14 @@ el_status el_relocate(el_ctx *ctx)
         return EL_BADREL;
     }
 
-    Elf_Rel rel;
     size_t relcnt = ri.tablesize / sizeof(Elf_Rel);
+    Elf_Rel *reltab = base + ri.tableoff;
     for (size_t i = 0; i < relcnt; i++) {
-        if ((rv = el_pread(ctx, &rel, sizeof rel, ri.tableoff + i * sizeof rel)))
-            return rv;
-
-        if ((rv = el_applyrel(ctx, &rel)))
+        if ((rv = el_applyrel(ctx, &reltab[i])))
             return rv;
     }
+#else
+    EL_DEBUG("Architecture doesn't use REL\n");
 #endif
 
 #ifdef EL_ARCH_USES_RELA
@@ -263,15 +264,14 @@ el_status el_relocate(el_ctx *ctx)
         return EL_BADREL;
     }
 
-    Elf_RelA rela;
     size_t relacnt = ri.tablesize / sizeof(Elf_RelA);
+    Elf_RelA *relatab = base + ri.tableoff;
     for (size_t i = 0; i < relacnt; i++) {
-        if ((rv = el_pread(ctx, &rela, sizeof rela, ri.tableoff + i * sizeof rela)))
-            return rv;
-
-        if ((rv = el_applyrela(ctx, &rela)))
+        if ((rv = el_applyrela(ctx, &relatab[i])))
             return rv;
     }
+#else
+    EL_DEBUG("Architecture doesn't use RELA\n");
 #endif
 
 #if !defined(EL_ARCH_USES_REL) && !defined(EL_ARCH_USES_RELA)
