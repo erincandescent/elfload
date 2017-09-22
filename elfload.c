@@ -231,7 +231,7 @@ el_status el_relocate(el_ctx *ctx)
     if (ctx->ehdr.e_type != ET_DYN)
         return EL_OK;
 
-    const char *base = ctx->base_load_paddr;
+    char *base = (char *) ctx->base_load_paddr;
 
     el_relocinfo ri;
 #ifdef EL_ARCH_USES_REL
@@ -265,7 +265,7 @@ el_status el_relocate(el_ctx *ctx)
     }
 
     size_t relacnt = ri.tablesize / sizeof(Elf_RelA);
-    Elf_RelA *relatab = base + ri.tableoff;
+    Elf_RelA *relatab = (Elf_RelA *)(base + ri.tableoff);
     for (size_t i = 0; i < relacnt; i++) {
         if ((rv = el_applyrela(ctx, &relatab[i])))
             return rv;
