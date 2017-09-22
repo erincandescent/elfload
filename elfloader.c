@@ -94,5 +94,10 @@ int main(int argc, char **argv)
     printf("Binary entrypoint is %x; invoking %p\n", ctx.ehdr.e_entry, ep);
 
     go(ep);
+
+    fclose(f);
+
+    free(buf);
+
     return 0;
 }
