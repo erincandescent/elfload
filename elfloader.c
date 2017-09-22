@@ -23,6 +23,8 @@ typedef void (*entrypoint_t)(int (*putsp)(const char*));
 
 static bool fpread(el_ctx *ctx, void *dest, size_t nb, size_t offset)
 {
+    (void) ctx;
+
     if (fseek(f, offset, SEEK_SET))
         return false;
 
@@ -38,6 +40,10 @@ static void *alloccb(
     Elf_Addr virt,
     Elf_Addr size)
 {
+    (void) ctx;
+    (void) phys;
+    (void) virt;
+    (void) size;
     return (void*) virt;
 }
 
@@ -91,7 +97,7 @@ int main(int argc, char **argv)
 
     entrypoint_t ep = (entrypoint_t) epaddr;
 
-    printf("Binary entrypoint is %x; invoking %p\n", ctx.ehdr.e_entry, ep);
+    printf("Binary entrypoint is %lx; invoking %p\n", ctx.ehdr.e_entry, ep);
 
     go(ep);
 
