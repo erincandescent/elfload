@@ -1,0 +1,11 @@
+*.o
+*.a
+*.so
+/a.out
+/elfloader
+/sample
+*.obj
+*.lib
+*.dll
+*.exe
+/build

@@ -24,7 +24,6 @@ el_status el_applyrela(el_ctx *ctx, Elf_RelA *rel)
 {
     uint64_t *p = (uint64_t*) (rel->r_offset + ctx->base_load_vaddr);
     uint32_t type = ELF_R_TYPE(rel->r_info);
-    uint32_t sym  = ELF_R_SYM(rel->r_info);
 
     switch (type) {
         case R_AMD64_NONE: break;

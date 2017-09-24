@@ -11,6 +11,7 @@
  * OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+#include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/mman.h>
@@ -23,6 +24,8 @@ typedef void (*entrypoint_t)(int (*putsp)(const char*));
 
 static bool fpread(el_ctx *ctx, void *dest, size_t nb, size_t offset)
 {
+    (void) ctx;
+
     if (fseek(f, offset, SEEK_SET))
         return false;
 
@@ -38,6 +41,9 @@ static void *alloccb(
     Elf_Addr virt,
     Elf_Addr size)
 {
+    (void) ctx;
+    (void) phys;
+    (void) size;
     return (void*) virt;
 }
 
@@ -91,8 +97,13 @@ int main(int argc, char **argv)
 
     entrypoint_t ep = (entrypoint_t) epaddr;
 
-    printf("Binary entrypoint is %x; invoking %p\n", ctx.ehdr.e_entry, ep);
+    printf("Binary entrypoint is %" PRIxPTR "; invoking %p\n", (uintptr_t) ctx.ehdr.e_entry, ep);
 
     go(ep);
+
+    fclose(f);
+
+    free(buf);
+
     return 0;
 }
