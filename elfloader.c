@@ -17,17 +17,25 @@
 #include <sys/mman.h>
 #include "elfload.h"
 
-FILE *f;
-void *buf;
-
 typedef void (*entrypoint_t)(int (*putsp)(const char*));
 
-static bool fpread(el_ctx *ctx, void *dest, size_t nb, size_t offset)
+static bool fpseek(el_file *file, size_t offset)
 {
-    (void) ctx;
+    FILE *f;
+
+    f = (FILE *) file->data;
 
     if (fseek(f, offset, SEEK_SET))
         return false;
+
+    return true;
+}
+
+static bool fpread(el_file *file, void *dest, size_t nb)
+{
+    FILE *f;
+
+    f = (FILE *) file->data;
 
     if (fread(dest, nb, 1, f) != 1)
         return false;
@@ -62,6 +70,9 @@ static void go(entrypoint_t ep)
 
 int main(int argc, char **argv)
 {
+    FILE *f;
+    void *buf;
+
     if (argc < 2) {
         fprintf(stderr, "usage: %s [elf-to-load]\n", argv[0]);
         return 1;
@@ -74,7 +85,9 @@ int main(int argc, char **argv)
     }
 
     el_ctx ctx;
-    ctx.pread = fpread;
+    ctx.file.data = f;
+    ctx.file.seek = fpseek;
+    ctx.file.read = fpread;
 
     check(el_init(&ctx), "initialising");
 

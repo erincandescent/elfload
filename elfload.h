@@ -44,8 +44,14 @@ typedef enum {
 
 } el_status;
 
+typedef struct el_file {
+    void *data;
+    bool (*seek)(struct el_file *file, size_t offset);
+    bool (*read)(struct el_file *file, void *dest, size_t nb);
+} el_file;
+
 typedef struct el_ctx {
-    bool (*pread)(struct el_ctx *ctx, void *dest, size_t nb, size_t offset);
+    el_file file;
 
     /* base_load_* -> address we are actually going to load at
      */
