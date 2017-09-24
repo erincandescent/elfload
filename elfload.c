@@ -17,7 +17,17 @@
 
 el_status el_pread(el_ctx *ctx, void *def, size_t nb, size_t offset)
 {
-    return ctx->pread(ctx, def, nb, offset) ? EL_OK : EL_EIO;
+    bool rv;
+
+    rv = ctx->file.seek(&ctx->file, offset);
+    if (!rv)
+        return EL_EIO;
+
+    rv = ctx->file.read(&ctx->file, def, nb);
+    if (!rv)
+        return EL_EIO;
+
+    return EL_OK;
 }
 
 #define EL_PHOFF(ctx, num) (((ctx)->ehdr.e_phoff + (num) * (ctx)->ehdr.e_phentsize))
