@@ -11,6 +11,7 @@
  * OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+#include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/mman.h>
@@ -96,7 +97,7 @@ int main(int argc, char **argv)
 
     entrypoint_t ep = (entrypoint_t) epaddr;
 
-    printf("Binary entrypoint is %x; invoking %p\n", ctx.ehdr.e_entry, ep);
+    printf("Binary entrypoint is %" PRIxPTR "; invoking %p\n", (uintptr_t) ctx.ehdr.e_entry, ep);
 
     go(ep);
 
