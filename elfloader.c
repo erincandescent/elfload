@@ -42,7 +42,6 @@ static void *alloccb(
 {
     (void) ctx;
     (void) phys;
-    (void) virt;
     (void) size;
     return (void*) virt;
 }

@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.12) 
 
 if (CMAKE_COMPILER_IS_GNUCC)
-  add_compile_options(-Wall -Wextra -Werror -Wfatal-errors)
+  add_compile_options(-Wall -Wextra)
 endif (CMAKE_COMPILER_IS_GNUCC)
 
 add_library("elfload"
