@@ -96,7 +96,7 @@ int main(int argc, char **argv)
 
     entrypoint_t ep = (entrypoint_t) epaddr;
 
-    printf("Binary entrypoint is %lx; invoking %p\n", ctx.ehdr.e_entry, ep);
+    printf("Binary entrypoint is %x; invoking %p\n", ctx.ehdr.e_entry, ep);
 
     go(ep);
 
